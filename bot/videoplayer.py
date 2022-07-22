@@ -13,9 +13,9 @@ VIDEO_CALL = {}
 @Client.on_message(filters.command("stream"))
 async def stream(client, m: Message):
     replied = m.reply_to_message
-    if not replied:
+    if not replied or not replied.video and not replied.document:
         await m.reply("`Reply to some Video!`")
-    elif replied.video or replied.document:
+    else:
         msg = await m.reply("`Downloading...`")
         chat_id = m.chat.id
         try:
@@ -33,8 +33,6 @@ async def stream(client, m: Message):
             await msg.edit("**▶️ Started Streaming!**")
         except Exception as e:
             await msg.edit(f"**Error** -- `{e}`")
-    else:
-        await m.reply("`Reply to some Video!`")
 
 @Client.on_message(filters.command("stop"))
 async def stopvideo(client, m: Message):
